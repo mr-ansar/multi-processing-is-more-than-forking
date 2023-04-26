@@ -1,0 +1,11 @@
+{
+    "value": {
+        "duties": [
+            "noop",
+            "snooze",
+            "factorial"
+        ],
+        "management_levels": 1,
+        "managers": 1
+    }
+}
