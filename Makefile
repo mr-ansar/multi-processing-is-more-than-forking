@@ -1,6 +1,9 @@
 BIN=dist
 
 
+deploy: all
+	ansar --force --debug-level=DEBUG deploy dist --storage-path=consignment
+
 all: $(BIN)/noop $(BIN)/zombie $(BIN)/snooze $(BIN)/factorial $(BIN)/busy $(BIN)/search
 
 $(BIN)/noop: noop.py
@@ -39,6 +42,12 @@ $(BIN)/search: search.py
 clean::
 	-@rm -f $(BIN)/search
 
+clean-dist:
+	-@rm -f dist/* *.spec
+	-@rm -rf __pycache__
+
+clean:: clean-dist
+
+
 clean::
-	-@rm -rf *.spec __pycache__
 	-@ansar -f destroy
