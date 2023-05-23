@@ -2,7 +2,7 @@ BIN=dist
 
 
 deploy: all
-	ansar --force --debug-level=DEBUG deploy dist --storage-path=storage
+	ansar --force --debug-level=CONSOLE deploy dist storage
 
 all: $(BIN)/noop $(BIN)/zombie $(BIN)/snooze $(BIN)/factorial $(BIN)/busy $(BIN)/search
 
