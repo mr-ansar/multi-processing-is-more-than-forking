@@ -52,8 +52,9 @@ def accepted(self, conn, addr, word_map):
                     pass
                 conn.sendall(word)    # Echo data back to client.
     except OSError as e:
-        self.warning('Session error - "{e}"'.format(e=str(e)))
-        return ar.Nak()
+        s=str(e)
+        self.warning('Session error - "{s}"'.format(s=s))
+        return ar.Faulted(condition='Session failed', explanation=s)
     return ar.Ack()
 
 ar.bind(accepted)
@@ -88,8 +89,9 @@ def listen(self, address):
                 self.select(ar.Completed)
                 self.debrief()
     except OSError as e:
-        self.warning('Listen error - "{e}"'.format(e=str(e)))
-        return ar.Nak()
+        s=str(e)
+        self.warning('Listen error - "{s}"'.format(s=s))
+        return ar.Faulted(condition='Cannot establish listen', explanation=s)
     return ar.Ack()
 
 ar.bind(listen)
@@ -109,7 +111,7 @@ def server(self, settings):
             # Fall through and close.
         self.select(ar.Completed)
         return ar.Aborted()
-    return ar.Ack()
+    return m.value
     
 ar.bind(server)
 
