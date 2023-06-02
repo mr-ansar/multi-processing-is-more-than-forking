@@ -67,8 +67,9 @@ def listen(self, address):
         f = model.file('word-map', ar.MapOf(ar.String, ar.String))
         try:
             word_map, _ = f.recover()
+            self.console(f'Loaded {len(word_map)} mappings')
         except ar.FileNotFound:
-            pass
+            self.console(f'No mappings available')
 
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
