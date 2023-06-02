@@ -20,74 +20,56 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-.SUFFIXES: .py
 
-% : %.py
+# Generate useful lists of build artefacts.
+EXECUTABLES := analyzer busy client factorial noop server snooze zombie
+BUILD := $(EXECUTABLES:%=dist/%)
+SPEC := $(EXECUTABLES:%=%.spec)
+
+# Separate the test roles from the others.
+TESTS = test-.*
+
+# The default target is the development loop.
+all: test
+
+# Turn a python script into an executable.
+dist/% : %.py
 	pyinstaller --onefile --log-level ERROR -p . $<
 
-BIN=dist
+clean::
+	-rm -rf build dist
 
-
-all: executable
-	ansar --force --debug-level=CONSOLE deploy storage
-
-executable: $(BIN)/noop $(BIN)/zombie $(BIN)/snooze $(BIN)/factorial $(BIN)/busy $(BIN)/server $(BIN)/client $(BIN)/analyzer
-
-
-$(BIN)/noop: noop.py
-	pyinstaller --onefile --log-level ERROR -p . noop.py
+# All the executables.
+build: $(BUILD)
 
 clean::
-	-@rm -f $(BIN)/noop
+	-rm -f $(SPEC)
 
-$(BIN)/zombie: zombie.py
-	pyinstaller --onefile --log-level ERROR -p . zombie.py
-
-clean::
-	-@rm -f $(BIN)/zombie
-
-$(BIN)/snooze: snooze.py
-	pyinstaller --onefile --log-level ERROR -p . snooze.py
-
-clean::
-	-@rm -f $(BIN)/snooze
-
-$(BIN)/factorial: factorial.py
-	pyinstaller --onefile --log-level ERROR -p . factorial.py
+# Compose the multi-process solution. Ensure that test
+# executables begin with the proper convention.
+home: build
+	ansar create
+	ansar deploy dist
+	ansar add server
+	ansar add client test-client
+	ansar add zombie
+	ansar set retry test-client --encoding-file=client-retry
+	ansar extract testing
 
 clean::
-	-@rm -f $(BIN)/factorial
+	-rm -rf testing
+	-ansar -f destroy
 
-$(BIN)/busy: busy.py
-	pyinstaller --onefile --log-level ERROR -p . busy.py
+# Bring the composition up to operational status, i.e. every
+# role except the test roles.
+start:
+	ansar -f start "$(TESTS)" --invert-search
 
-clean::
-	-@rm -f $(BIN)/busy
+# Bring down the operational roles.
+stop:
+	ansar -f stop "$(TESTS)" --invert-search
 
-$(BIN)/server: server.py
-	pyinstaller --onefile --log-level ERROR -p . server.py
-
-clean::
-	-@rm -f $(BIN)/server
-
-$(BIN)/client: client.py
-	pyinstaller --onefile --log-level ERROR -p . client.py
-
-clean::
-	-@rm -f $(BIN)/client
-
-$(BIN)/analyzer: analyzer.py
-	pyinstaller --onefile --log-level ERROR -p . analyzer.py
-
-clean::
-	-@rm -f $(BIN)/client
-
-clean-dist:
-	-@rm -f dist/* *.spec
-	-@rm -rf __pycache__
-
-clean:: clean-dist
-
-
-clean::
-	-@ansar -f destroy
+# The development loop.
+test: build
+	ansar --force --debug-level=CONSOLE deploy dist testing
+	ansar run "$(TESTS)" --code-path=. --test-run
