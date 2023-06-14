@@ -21,13 +21,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# This repo needs the following;
+# Final setup for this repo;
 # - python3 -m venv .env
 # - source .env/bin/activate
 # - pip install pyinstaller
 # - pip install ansar-create
 # - make build home start
-# - make (repeat, the edit-run-debug loop)
+# - ansar list -l
+# - ansar status -l
+#
+# Home processes are operational. Running a make at this point
+# is an iteration of the edit-run-debug loop.
+# - make
 
 # Generate useful lists of build artefacts.
 EXECUTABLES := analyzer busy client factorial noop server snooze zombie
