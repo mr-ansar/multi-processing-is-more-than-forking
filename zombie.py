@@ -34,6 +34,7 @@ import ansar.create as ar
 def zombie(self):
 	self.console('Do nothing until interrupted')
 	self.select(ar.Stop)
+	return ar.Ack()
 
 ar.bind(zombie)
 

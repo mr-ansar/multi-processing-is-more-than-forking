@@ -104,4 +104,4 @@ ar.bind(busy)
 default_input = JobInput(duties=['noop', 'snooze', 'factorial'])
 
 if __name__ == '__main__':
-	ar.create_object(busy, compiled_input=default_input)
+	ar.create_object(busy, factory_input=default_input)

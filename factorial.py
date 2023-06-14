@@ -64,4 +64,4 @@ ar.bind(factorial)
 default_input = 5
 
 if __name__ == '__main__':
-	ar.create_object(factorial, compiled_input=default_input)
+	ar.create_object(factorial, factory_input=default_input)

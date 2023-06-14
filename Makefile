@@ -21,6 +21,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+# This repo needs the following;
+# - python3 -m venv .env
+# - source .env/bin/activate
+# - pip install pyinstaller
+# - pip install ansar-create
+# - make build home start
+# - make (repeat, the edit-run-debug loop)
+
 # Generate useful lists of build artefacts.
 EXECUTABLES := analyzer busy client factorial noop server snooze zombie
 BUILD := $(EXECUTABLES:%=dist/%)

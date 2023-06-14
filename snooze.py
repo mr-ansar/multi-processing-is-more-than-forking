@@ -51,4 +51,4 @@ ar.bind(snooze)
 default_settings = SnoozeSettings(seconds=2.0)
 
 if __name__ == '__main__':
-	ar.create_object(snooze, compiled_settings=default_settings)
+	ar.create_object(snooze, factory_settings=default_settings)

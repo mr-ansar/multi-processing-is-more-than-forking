@@ -79,4 +79,4 @@ ar.bind(client)
 settings = ServerAddress('127.0.0.1', 65432)
 
 if __name__ == '__main__':
-    ar.create_object(client, compiled_settings=settings)
+    ar.create_object(client, factory_settings=settings)

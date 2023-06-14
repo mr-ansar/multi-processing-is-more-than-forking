@@ -55,5 +55,5 @@ ar.bind(CommandEnvironment, object_schema=command_variables_SCHEMA)
 default_environment = CommandEnvironment()
 
 if __name__ == '__main__':
-	ar.create_object(noop, compiled_variables=default_environment)
+	ar.create_object(noop, factory_variables=default_environment)
 
